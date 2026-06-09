@@ -1,0 +1,55 @@
+﻿@model IEnumerable<BookStoreWeb.Models.Book>
+
+@{
+    ViewData["Title"] = "Danh Sách Sách";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 fs-5">Kho Sách (Đang đồng bộ trực tiếp từ SQL Server)</h4>
+            <a asp-action="Create" class="btn btn-light btn-sm text-primary fw-bold">Thêm Sách Mới</a>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped align-middle mb-0">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 80px;">ID</th>
+                        <th>Tiêu Đề</th>
+                        <th>Tác Giả</th>
+                        <th>Giá Tiền</th>
+                        <th style="width: 120px;">Tồn Kho</th>
+                        <th style="width: 120px;" class="text-center">Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                <td><strong class="text-primary">@item.Title</strong></td>
+                                <td>@item.Author</td>
+                                <td>@item.Price.ToString("#,##0") VNĐ</td>
+                                <td>@item.Stock</td>
+                                <td class="text-center">
+                                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa cuốn sách này không?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger btn-sm px-3">Xóa</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Chưa có cuốn sách nào trong cơ sở dữ liệu.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
